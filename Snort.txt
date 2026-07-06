@@ -24,7 +24,7 @@ sudo vim /etc/snort/snort.conf
 Modify:
 
 ipvar HOME_NET 192.168.74.117/24
-ipvar EXTERNAL_NET !HOME_NET
+ipvar EXTERNAL_NET !$HOME_NET
 
 Go to around line 590 and uncomment:
 
