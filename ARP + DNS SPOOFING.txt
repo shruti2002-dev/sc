@@ -1,0 +1,132 @@
+=========================================
+ARP SPOOFING & DNS SPOOFING USING ETTERCAP
+=========================================
+
+----------------------------------------------------
+PREREQUISITES
+----------------------------------------------------
+
+- Attacker Machine: Kali Linux
+- Victim Machine: Linux/Windows
+- Both machines must be connected to the same NAT network.
+
+----------------------------------------------------
+PART 1: ARP SPOOFING
+----------------------------------------------------
+
+STEP 1: START ETTERCAP GUI
+
+sudo ettercap -G
+
+----------------------------------------------------
+STEP 2: SCAN FOR HOSTS
+----------------------------------------------------
+
+Hosts
+    ↓
+Scan for Hosts
+
+----------------------------------------------------
+STEP 4: START ARP SPOOFING
+----------------------------------------------------
+
+MitM (click on Globe sign)
+    ↓
+ARP Poisoning
+
+Enable:
+
+✓ Sniff Remote Connections
+
+Click OK.
+
+----------------------------------------------------
+STEP 5: VERIFY ON VICTIM MACHINE
+----------------------------------------------------
+
+Check the ARP table:
+
+arp -a
+
+=======================================================================
+----------------------------------------------------
+PART 2: DNS SPOOFING
+----------------------------------------------------
+
+STEP 1: CREATE A WEB PAGE ON ATTACKER
+----------------------------------------------------
+
+mkdir web
+cd web
+
+cat > index.html
+
+Add:
+
+Welcome to danger
+
+Press:
+
+Ctrl + D
+
+----------------------------------------------------
+STEP 2: START WEB SERVER
+----------------------------------------------------
+
+python3 -m http.server 80
+
+Keep this terminal running.
+
+----------------------------------------------------
+STEP 3: START ETTERCAP
+----------------------------------------------------
+
+sudo ettercap -G
+
+----------------------------------------------------
+STEP 4: PERFORM ARP SPOOFING
+----------------------------------------------------
+
+Repeat the Arp spoofing steps:
+
+----------------------------------------------------
+STEP 5: ENABLE DNS SPOOFING PLUGIN
+----------------------------------------------------
+
+Plugins
+    ↓
+Manage Plugins
+
+Double-click:
+
+dns_spoof
+
+----------------------------------------------------
+STEP 6: VERIFY ON VICTIM MACHINE
+----------------------------------------------------
+
+Check the ARP table:
+
+arp -a
+
+or
+
+ip neigh
+
+----------------------------------------------------
+STEP 7: TEST DNS SPOOFING
+----------------------------------------------------
+
+On the victim machine:
+
+curl google.com
+
+Expected Output:
+
+Welcome to danger
+
+----------------------------------------------------
+RESULT
+----------------------------------------------------
+
+Successfully demonstrated ARP Spoofing and DNS Spoofing using Ettercap. The victim's ARP cache was poisoned, DNS requests were redirected to the attacker's web server, and the spoofed web page was displayed.
