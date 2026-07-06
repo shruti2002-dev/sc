@@ -1,0 +1,82 @@
+=========================================
+SNORT IDS SETUP & TESTING (Debian/Ubuntu)
+=========================================
+
+----------------------------------------------------
+STEP 1: INSTALL SNORT
+----------------------------------------------------
+
+sudo apt update
+sudo apt install snort -y
+
+----------------------------------------------------
+STEP 2: DISABLE DEFAULT RULES
+----------------------------------------------------
+
+sudo sed -i 's/include \$RULE_PATH/#include \$RULE_PATH/' /etc/snort/snort.conf
+
+----------------------------------------------------
+STEP 3: EDIT SNORT CONFIGURATION
+----------------------------------------------------
+
+sudo vim /etc/snort/snort.conf
+
+Modify:
+
+ipvar HOME_NET 192.168.74.117/24
+ipvar EXTERNAL_NET !HOME_NET
+
+Go to around line 590 and uncomment:
+
+include $RULE_PATH/local.rules
+
+Save and Exit:
+
+:wq
+
+----------------------------------------------------
+STEP 4: CREATE LOCAL RULE
+----------------------------------------------------
+
+sudo vim /etc/snort/rules/local.rules
+
+Add:
+
+alert ip any any -> any any (msg:"IP Packet Detected"; sid:100001;)
+
+alert tcp any any -> $HOME_NET 80 (msg:"HTTP Admin Page Access"; content:"/admin"; http_uri; sid:1000002;)
+
+alert udp $HOME_NET any -> any 53 (msg:"DNS Query for .xyz Domain"; content:".xyz"; nocase; sid:1000003;)
+
+alert tcp any any -> $HOME_NET 80 (msg:"Nmap NSE HTTP Request"; content:"User-Agent|3A| Nmap Scripting Engine"; http_header; sid:1000004;)
+
+alert tcp any any -> $HOME_NET 80 (msg:"SQL Injection Attempt"; content:"' OR 1=1"; nocase; http_uri; sid:1000005;)
+
+
+Save and Exit:
+
+:wq
+
+----------------------------------------------------
+STEP 5: START SNORT
+----------------------------------------------------
+
+sudo snort -A console -q -i ens33 -c /etc/snort/snort.conf
+
+----------------------------------------------------
+STEP 6: GENERATE TRAFFIC USING SCAPY ON KALI
+----------------------------------------------------
+
+sudo apt install python3-scapy -y
+
+a = IP()
+b = TCP()
+a.show()
+a.src = "ATTACKER_IP"
+Set destination IP:
+a.dst = "TARGET_IP"
+Set TCP Flag (FIN):
+b.flags = "F"
+send(a/b, count=10)
+
+

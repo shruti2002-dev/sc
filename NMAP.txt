@@ -1,0 +1,92 @@
+=========================================
+NMAP 
+=========================================
+
+Syntax:
+
+nmap <options> <target>
+
+Example:
+nmap 192.168.1.10
+
+Note:
+• By default, Nmap scans the 1000 most common TCP ports.
+• Display help:
+
+nmap --help
+
+----------------------------------------------------
+1. PING SCAN (Host Discovery)
+----------------------------------------------------
+
+Check whether the target host is alive:
+nmap -sn <target-ip>
+
+If ICMP (Ping) is blocked:
+nmap -sn -Pn <target-ip>
+
+----------------------------------------------------
+2. TCP CONNECT SCAN
+----------------------------------------------------
+
+nmap -sT <target-ip>
+
+Scan specific ports:
+
+nmap -sT <target-ip> -p 80,4444
+
+----------------------------------------------------
+3. SYN SCAN (Half-Open Scan)
+----------------------------------------------------
+
+nmap -sS <target-ip>
+
+----------------------------------------------------
+4. OS DETECTION
+----------------------------------------------------
+nmap -O <target-ip>
+
+Detect Services, Versions, and OS:
+
+nmap -sSV -O <target-ip>
+
+----------------------------------------------------
+5. SAVE SCAN RESULT AS XML
+----------------------------------------------------
+
+nmap -oX report.xml <target-ip>
+
+Example:
+
+nmap -sSV -O -oX report.xml 192.168.1.10
+
+----------------------------------------------------
+6. CONVERT XML REPORT TO HTML
+----------------------------------------------------
+
+xsltproc report.xml > report.html
+
+Open report:
+
+firefox report.html
+
+----------------------------------------------------
+EXTRA
+----------------------------------------------------
+
+Scan ports on `192.168.1.10` even if ICMP is blocked**
+nmap -Pn 192.168.1.10
+
+Scan an IPv6 address `2001:db8::1`**
+nmap -6 2001:db8::1
+
+Scan only the top 1000 common ports on `192.168.1.10`**
+nmap --top-ports 1000 192.168.1.10
+
+Detect the service versions running on open ports**
+nmap -sV 192.168.1.10
+
+Determine if a firewall is filtering ports**
+nmap -sA 192.168.1.10
+
+

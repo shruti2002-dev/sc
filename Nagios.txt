@@ -1,0 +1,70 @@
+==========================
+NAGIOS XI + NCPA CLIENT SETUP
+==========================
+
+1. Open VMware and start the Nagios XI OVA.
+
+2. Login:
+Username: root
+Password: nagiosxi
+
+3. Check Nagios Server IP:
+ip -br a
+
+4. Open browser:
+http://<Nagios_Server_IP>
+
+5. Login to Nagios XI:
+Username: nagiosadmin
+Password: redhat
+
+------------------------------------
+ON CLIENT (Ubuntu/Debian)
+------------------------------------
+
+sudo apt update
+sudo apt install ncpa -y
+
+OR
+
+wget https://assets.nagios.com/downloads/ncpa/ncpa-latest-1.amd64.deb
+sudo dpkg -i ncpa-latest-1.amd64.deb
+
+sudo systemctl start ncpa
+sudo systemctl enable ncpa
+sudo systemctl status ncpa
+sudo ufw allow 5693/tcp
+sudo vim /usr/local/ncpa/etc/ncpa.cfg
+
+# Find and change:
+community_string = redhat
+# Save:
+:wq
+
+sudo systemctl restart ncpa
+
+
+------------------------------------
+ON NAGIOS XI
+------------------------------------
+
+Configure
+→ Configuration Wizards
+→ Linux Server (NCPA)
+
+Enter:
+Host Name : Client1
+Address : <Client_IP>
+Token : redhat
+
+Click:
+Next → Next → Finish → Apply Configuration
+
+Go to:
+Monitoring → Hosts
+
+Wait 1–2 minutes.
+
+Status should show:
+Host = UP
+Services = OK

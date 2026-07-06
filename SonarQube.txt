@@ -1,0 +1,124 @@
+
+=========================================
+SONARQUBE SETUP & PYTHON CODE SCANNING
+=========================================
+
+----------------------------------------------------
+STEP 1: INSTALL DOCKER
+----------------------------------------------------
+
+sudo apt update
+sudo apt install docker.io -y
+
+----------------------------------------------------
+STEP 2: START SONARQUBE CONTAINER
+----------------------------------------------------
+
+sudo docker run -d --name sonarqube-custom --restart unless-stopped -p 9000:9000 sonarqube:community
+
+Verify container:
+
+sudo docker ps
+
+----------------------------------------------------
+STEP 3: OPEN SONARQUBE
+----------------------------------------------------
+
+Open Browser:
+
+http://<SERVER_IP>:9000
+
+Default Credentials:
+
+Username: admin
+Password: admin
+
+(Change password if prompted.)
+
+----------------------------------------------------
+STEP 4: CREATE PROJECT
+----------------------------------------------------
+
+Projects
+→ Create Project
+→ Create a Local Project
+
+Project Name : demo
+Project Key  : demo
+
+Continue
+→ Locally
+→ Generate Token
+→ Select Python
+
+----------------------------------------------------
+STEP 5: DOWNLOAD SAMPLE PYTHON PROJECT
+----------------------------------------------------
+
+mkdir sonar
+cd sonar
+
+git clone https://github.com/Commando-X/vuln-bank.git
+
+cd vuln-bank
+
+----------------------------------------------------
+STEP 6: INSTALL PYSONAR (FOR PYTHON)
+----------------------------------------------------
+
+
+sudo pip install pysonar --break-system-packages
+
+Run this command inside the project directory:
+
+pysonar \
+--sonar-host-url=http://<SERVER_IP>:9000 \
+--sonar-token=<YOUR_TOKEN> \
+--sonar-project-key=demo
+
+
+
+====================================================
+FOR OTHER PROGRAMMING LANGUAGES (SONAR SCANNER CLI)
+====================================================
+
+----------------------------------------------------
+STEP 1: DOWNLOAD SONAR SCANNER
+----------------------------------------------------
+
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-8.0.1.6346-linux-x64.zip
+
+sudo apt install unzip -y
+
+unzip sonar-scanner-cli-8.0.1.6346-linux-x64.zip
+
+cd sonar-scanner-8.0.1.6346-linux-x64/bin
+
+sudo ln -s $(pwd)/sonar-scanner /bin/sonar-scanner
+
+Verify:
+
+sonar-scanner -v
+
+----------------------------------------------------
+STEP 2: RUN SCAN IN SOURCE CODE DIR
+----------------------------------------------------
+sonar-scanner \
+-Dsonar.projectKey=Cdac-batch \
+-Dsonar.sources=. \
+-Dsonar.host.url=http://<SERVER_IP>:9000 \
+-Dsonar.token=<YOUR_TOKEN>
+
+----------------------------------------------------
+IF "COMMAND NOT FOUND" ERROR OCCURS
+----------------------------------------------------
+
+Run scanner using full path:
+
+/home/kali/sonar-scanner-8.0.1.6346-linux-x64/bin/sonar-scanner \
+-Dsonar.projectKey=Cdac-batch \
+-Dsonar.sources=. \
+-Dsonar.host.url=http://<SERVER_IP>:9000 \
+-Dsonar.token=<YOUR_TOKEN>
+
+
